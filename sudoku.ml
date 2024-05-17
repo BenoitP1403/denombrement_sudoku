@@ -866,7 +866,7 @@ let compter_tot () =
     begin
     print_endline "On charge la sauvegarde";
     let tab = load_from_file_array fich_compt in
-    for i = 0 to (Array.length sto_res) do
+    for i = 0 to (Array.length sto_res)-1 do
       sto_res.(i)<- tab.(i)
     done;
     end;
@@ -882,6 +882,8 @@ let compter_tot () =
         print_int i;
         print_string " ";
         print_int sto_res.(i);
+        print_endline " multiplicité ";
+        print_int mult;
         print_newline();
         res := !res + mult * (sto_res.(i));
       done;
