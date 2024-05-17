@@ -7,6 +7,7 @@ let chemin4 = "fusion4.dat";;
 let chemin5 = "fusion5.dat";;
 let chemin6 = "fusion6.dat";;
 let chemin7 = "fusion7.dat";;
+let fich_compt = "comptage.dat";;
 (*
 si on utilise wincaml on est obligés de spécifier le chemin entier (wincaml semble ne pas prendre pour répertoire courant le chemin du fichier .ml
 *)
@@ -567,7 +568,7 @@ let fusionne7 () =
 
 let exec7 () =
    if Sys.file_exists chemin7 then
-      let stor = load_partition_from_file chemin4 in
+      let stor = load_partition_from_file chemin7 in
          uf.elt <- stor.elt;
          uf.prof <- stor.prof;
          uf.taille <- stor.taille;
@@ -858,10 +859,31 @@ On obtient le résultat, qu'il faut ensuite multiplier par 9!*72^2.
 On ne le fait pas en caml pour éviter un overflow
  *)
 let compter_tot () =
+  let t =Array.length representants in
+  print_int  t;
+  let sto_res = Array.make t (-1) in
+  if Sys.file_exists fich_compt then
+    begin
+    print_endline "On charge la sauvegarde";
+    let tab = load_from_file_array fich_compt in
+    for i = 0 to (Array.length sto_res) do
+      sto_res.(i)<- tab.(i)
+    done;
+    end;
    let res = ref 0 in
       for i = 0 to - 1 + Array.length representants do
-         let repres, mult = representants.(i) in
-            res := !res + mult * (denomb repres)
+        let repres, mult = representants.(i) in
+        if sto_res.(i)= -1 then
+          begin
+            sto_res.(i)<- denomb repres;
+            save_to_file_array fich_compt sto_res
+          end;
+        print_endline "étape achevée numéro";
+        print_int i;
+        print_string " ";
+        print_int sto_res.(i);
+        print_newline();
+        res := !res + mult * (sto_res.(i));
       done;
       print_string "resultat final : 9!*72^2 *"; print_int !res; print_newline ();;
 compter_tot() ;; (*très long...*)
