@@ -1,8 +1,12 @@
 type partition = {mutable elt: int array; mutable prof: int array; mutable taille: int array};;
 
-let chemin1 = "P:\\Mes documents\\TIPE\\denombrement_sudoku-main\\fusion1.dat";;
-let chemin2 = "P:\\Mes documents\\TIPE\\denombrement_sudoku-main\\fusion2.dat";;
-let chemin3 = "P:\\Mes documents\\TIPE\\denombrement_sudoku-main\\fusion3.dat";;
+let chemin1 = "fusion1.dat";;
+let chemin2 = "fusion2.dat";;
+let chemin3 = "fusion3.dat";;
+let chemin4 = "fusion4.dat";;
+let chemin5 = "fusion5.dat";;
+let chemin6 = "fusion6.dat";;
+let chemin7 = "fusion7.dat";;
 (*
 si on utilise wincaml on est obligés de spécifier le chemin entier (wincaml semble ne pas prendre pour répertoire courant le chemin du fichier .ml
 *)
@@ -412,8 +416,170 @@ print_string "res fusionne3: ";;
 print_int (nb_classes(uf));;
 
 save_partition_to_file chemin3 uf;;
+(*plus que 416 classes*)
+
+(*fusionne 4*)
+let fusionne4 () =
+  for i = 0 to n - 1 do
+    print_string "fusionne4 etape :"; print_int i; print_newline ();
+     let b = copy_matrix dep.(i) in
+     for x1=1 to 8 do
+       for y1=1 to 2 do
+         for x2=x1+1 to 9 do
+           for y2 = y1 + 1 to 3 do
+             if b.(y1).(x1) = b.(y2).(x2) &&
+                  b.(y1).(x2) = b.(y2).(x1) then begin
+    let b' = copy_matrix b in
+    swap_m b' y1 x1 y1 x2;
+    swap_m b' y2 x1 y2 x2;
+    lier_b b' i
+  end
+           done
+         done
+       done
+     done
+   done;;
+
+let exec4 () =
+   if Sys.file_exists chemin4 then
+      let stor = load_partition_from_file chemin4 in
+         uf.elt <- stor.elt;
+         uf.prof <- stor.prof;
+         uf.taille <- stor.taille;
+   else
+      fusionne4 ();;
+exec4();;
+print_string "res fusionne4: ";;
+print_int (nb_classes(uf));;
+print_newline ();;
+
+save_partition_to_file chemin4 uf;;
+(*174 config ici*)
+(* étape 5*)
+let fusionne5 () =
+   for i = 0 to n - 1 do
+      print_string "fusionne5 étape :"; print_int i; print_newline ();
+      let b = copy_matrix dep.(i) in
+      for x1=1 to 8 do
+        for x2=x1+1 to 9 do
+          if b.(1).(x1) = b.(2).(x2)
+             && b.(2).(x1) = b.(3).(x2)
+             && b.(3).(x1) = b.(1).(x2) then
+            let b' = copy_matrix b in
+            echanger_colonnes b' x1 x2;
+            lier_b b' i            
+        done
+      done
+   done;;
+
+let exec5 () =
+   if Sys.file_exists chemin5 then
+      let stor = load_partition_from_file chemin5 in
+         uf.elt <- stor.elt;
+         uf.prof <- stor.prof;
+         uf.taille <- stor.taille;
+   else
+      fusionne5 ();;
+exec5();;
+print_string "res fusionne5: ";;
+print_int (nb_classes(uf));;
+
+save_partition_to_file chemin5 uf;;
+(*plus que 141 classes*)
+
+(* étape 6*)
+let fusionne6 () =
+   for i = 0 to n - 1 do
+      print_string "fusionne6 étape :"; print_int i; print_newline ();
+      let b = copy_matrix dep.(i) in
+      for x1=1 to 3 do
+        for x2=3 to 6 do
+          for x3= 7 to 9 do
+            for y1 =1 to 2 do
+              for y2 = y1+1 to 3 do
+                if  b.(y1).(x1) = b.(y2).(x2)
+                    && b.(y1).(x2) = b.(y2).(x3)
+                    && b.(y1).(x3) = b.(y2).(x1) then
+                  let b' = copy_matrix b in
+                  swap_m b' y1 x1 y2 x1;
+                  swap_m b' y1 x2 y2 x2;
+                  swap_m b' y1 x3 y2 x3;
+                  lier_b b' i
+              done
+            done
+          done
+        done
+      done
+      
+  
+   done;;
+
+let exec6 () =
+   if Sys.file_exists chemin6 then
+      let stor = load_partition_from_file chemin6 in
+         uf.elt <- stor.elt;
+         uf.prof <- stor.prof;
+         uf.taille <- stor.taille;
+   else
+      fusionne6 ();;
+exec6();;
+print_string "res fusionne6: ";;
+print_int (nb_classes(uf));;
+print_newline ();;
+
+save_partition_to_file chemin6 uf;;
+(*plus que 86 classes*)
 
 
+(*fusionne 7*)
+let fusionne7 () =
+  for i = 0 to n - 1 do
+    print_string "fusionne7 etape :"; print_int i; print_newline ();
+    let b = copy_matrix dep.(i) in
+    for x1 = 1 to 6 do
+      for x2 = x1 + 1 to 7 do
+        for x3 = x2 + 1 to 8 do
+          for x4 = x3 + 1 to 9 do
+            for y1 = 1 to 2 do
+              for y2 = y1 + 1 to 3 do
+                if    b.(y1).(x1)=b.(y2).(x3)
+                   && b.(y1).(x3) = b.(y2).(x2)
+                   && b.(y1).(x2) = b.(y2).(x4)
+                   && b.(y1).(x4) = b.(y2).(x1)
+                   || b.(y1).(x1) = b.(y2).(x3)
+                   && b.(y1).(x3) = b.(y2).(x4)
+                   && b.(y1).(x4) = b.(y2).(x3)
+                   && b.(y1).(x3) = b.(y2).(x1) then
+                  let b' = copy_matrix b in
+                  swap_m b' y1 x1 y2 x1;
+                  swap_m b' y1 x2 y2 x2;
+                  swap_m b' y1 x3 y2 x3;
+                  swap_m b' y1 x4 y2 x4;
+                  lier_b b' i;
+              done
+            done
+          done
+        done
+      done
+    done
+  
+   done;;
+
+let exec7 () =
+   if Sys.file_exists chemin7 then
+      let stor = load_partition_from_file chemin4 in
+         uf.elt <- stor.elt;
+         uf.prof <- stor.prof;
+         uf.taille <- stor.taille;
+   else
+      fusionne7 ();;
+exec7();;
+print_string "res fusionne7: ";;
+print_int (nb_classes(uf));;
+print_newline ();;
+
+save_partition_to_file chemin7 uf;;
+(*71 config ici*)
 
 
 (*On a fini de regrouper les classes, on les synthétise*)
@@ -594,7 +760,7 @@ afficher_tableau_tableau u;;
 (*renvoie un masque qui code les différentes possibilités en x, y*)
 let masque u x y =
    u.(0).(x) lor u.(1).(y) lor u.(2).((x / 3) * 3 + (y / 3));;
-
+let cpt = ref 0;;
 (*affichage, deprecated*)
 let affichage u tableau n =
    if n mod 100000 = 0 then
@@ -613,7 +779,7 @@ let rec parcours u tableau num =
       else
          begin
             let x, y = ordre.(num) in
-               let m = ref ((masque u (x - 1) (y - 1)) lxor 0 b111111111) in
+               let m = ref ((masque u (x - 1) (y - 1)) lxor 0b111111111) in
                   while !m <> 0 do
                      if num = 0 then
                         begin print_string "On est au premier appel, indice"; print_int !m; print_newline (); end;
@@ -641,7 +807,6 @@ let comptage repres col1 =
          placer u tableau 7 0 (1 lsl (col1.(4) - 1));
          placer u tableau 8 0 (1 lsl (col1.(5) - 1));
          parcours u tableau 0;;
-comptage test [|2;3;5;6;8;9|];;
 
 (*
 Pour la première colonne:
