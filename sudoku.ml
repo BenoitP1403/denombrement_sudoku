@@ -1,3 +1,9 @@
+(* TIPE BENOÎT POREAUX MP*1
+Code de Benoît
+
+ *)
+
+
 type partition = {mutable elt: int array; mutable prof: int array; mutable taille: int array};;
 
 let chemin1 = "fusion1.dat";;
@@ -38,7 +44,7 @@ let nb_classes p =
          !cpt;;
 
 (*fusionne deux classes, algorithme du cours.
-Non optimal, long, mais non dérengeant:
+Non optimal, long, mais non dérangeant:
 la durée de cette étape reste négligeable devant la durée de la suivante*)
 let fusion p i j =
    let k = trouver_racine p i
@@ -88,7 +94,7 @@ let copy_matrix matrix =
             done;
             new_matrix;;
 
-(*renvoie 1+log2 m*)
+(*renvoie 1+log2 m si m puissance de deux, utilisé pour afficher une grille*)
 let masq_to_n m =
    match m with
    | 1 -> 1
@@ -299,7 +305,7 @@ let normaliser_chiffres boites =
          done;
       done;;
 
-(*on noramlise les chiffres et on trie les boites deux et trois*)
+(*on normalise les chiffres et on trie les boites deux et trois*)
 let normaliser boites =
    normaliser_chiffres boites;
    tri_colonnes boites;
@@ -586,16 +592,16 @@ save_partition_to_file chemin7 uf;;
 (*On a fini de regrouper les classes, on les synthétise*)
 let cree_repr () =
    let nb = nb_classes (uf) in
-      let representants = Array.make nb (dep.(0), 0) in
-         let cpt = ref 0 in
-            let somme = ref 0 in
-               for i = 0 to n - 1 do
-                  if uf.elt.(i) = i then
-                     begin representants.(!cpt) <- (dep.(i), uf.taille.(i)); (*print_int uf.taille.(i);print_string "\n"; *) somme := !somme + uf.taille.(i); incr cpt;
-                     end
-               done;
-               print_int !somme;
-               representants;;
+   let representants = Array.make nb (dep.(0), 0) in
+   let cpt = ref 0 in
+   let somme = ref 0 in
+   for i = 0 to n - 1 do
+      if uf.elt.(i) = i then
+      begin representants.(!cpt) <- (dep.(i), uf.taille.(i)); (*print_int uf.taille.(i);print_string "\n"; *) somme := !somme + uf.taille.(i); incr cpt;
+      end
+   done;
+   print_int !somme;
+   representants;;
 let representants = cree_repr();;
 
 
@@ -659,8 +665,8 @@ let remplir_init u tableau mat =
    for i = 0 to 2 do
       for j = 0 to 8 do
          let n = mat.(i + 1).(j + 1) in
-            if n <> 0 then
-               placer u tableau i j (1 lsl (n - 1))
+         if n <> 0 then
+            placer u tableau i j (1 lsl (n - 1))
       done
    done
 ;;
@@ -695,24 +701,24 @@ let affichage u tableau n =
 (*fonction de backtracking optimisé, utilisant ordre*)
 let rec parcours u tableau num =
    let res = ref 0 in
-      if num >= Array.length ordre then
-         begin 1;
-         end
-      else
-         begin
-            let x, y = ordre.(num) in
-               let m = ref ((masque u (x - 1) (y - 1)) lxor 0b111111111) in
-                  while !m <> 0 do
-                     if num = 0 then
-                        begin print_string "On est au premier appel, indice"; print_int !m; print_newline (); end;
-                     let i = !m land (- !m) in (*le plus petit bit à 1*)
-                        m := !m - i;
-                        placer u tableau (x - 1) (y - 1) i;
-                        res := !res + parcours u tableau (num + 1);
-                        retirer u tableau (x - 1) (y - 1) i;
-                  done;
-                  !res;
-         end;
+   if num >= Array.length ordre then
+      begin 1;
+      end
+   else
+      begin
+      let x, y = ordre.(num) in
+      let m = ref ((masque u (x - 1) (y - 1)) lxor 0b111111111) in
+         while !m <> 0 do
+            if num = 0 then
+               begin print_string "On est au premier appel, indice"; print_int !m; print_newline (); end;
+               let i = !m land (- !m) in (*le plus petit bit à 1*)
+               m := !m - i;
+               placer u tableau (x - 1) (y - 1) i;
+               res := !res + parcours u tableau (num + 1);
+               retirer u tableau (x - 1) (y - 1) i;
+            done;
+            !res;
+      end;
 ;;
 
 (*parcours u tableau 0;;*)
@@ -720,15 +726,15 @@ let rec parcours u tableau num =
 (*on compte toutes les possibilités pour le représentnat repres dont la première colonne est complétée par col1*)
 let comptage repres col1 =
    let u = Array.make_matrix 3 9 0 in
-      let tableau = Array.make_matrix 9 9 0 in
-         remplir_init u tableau repres;
-         placer u tableau 3 0 (1 lsl (col1.(0) - 1));
-         placer u tableau 4 0 (1 lsl (col1.(1) - 1));
-         placer u tableau 5 0 (1 lsl (col1.(2) - 1));
-         placer u tableau 6 0 (1 lsl (col1.(3) - 1));
-         placer u tableau 7 0 (1 lsl (col1.(4) - 1));
-         placer u tableau 8 0 (1 lsl (col1.(5) - 1));
-         parcours u tableau 0;;
+   let tableau = Array.make_matrix 9 9 0 in
+      remplir_init u tableau repres;
+      placer u tableau 3 0 (1 lsl (col1.(0) - 1));
+      placer u tableau 4 0 (1 lsl (col1.(1) - 1));
+      placer u tableau 5 0 (1 lsl (col1.(2) - 1));
+      placer u tableau 6 0 (1 lsl (col1.(3) - 1));
+      placer u tableau 7 0 (1 lsl (col1.(4) - 1));
+      placer u tableau 8 0 (1 lsl (col1.(5) - 1));
+      parcours u tableau 0;;
 
 (*
 Pour la première colonne:
