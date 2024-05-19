@@ -38,8 +38,8 @@ let nb_classes p =
          !cpt;;
 
 (*fusionne deux classes, algorithme du cours.
-Non optimal, long, mais non dérengent:
-la durée de cette étape rste négligeable devant la durée de la suivante*)
+Non optimal, long, mais non dérengeant:
+la durée de cette étape reste négligeable devant la durée de la suivante*)
 let fusion p i j =
    let k = trouver_racine p i
    and l = trouver_racine p j in
@@ -273,7 +273,7 @@ let tri_colonnes boites =
       echanger_colonnes boites 8 9;
    if (boites.(1).(7) > boites.(1).(8)) then
       echanger_colonnes boites 7 8;;
-(*normalise boites (ie transformela boite 1 en 123456789 ) *)
+(*normalise boites (ie transforme la boite 1 en 123456789 ) *)
 let normaliser_chiffres boites =
    let v1 = boites.(1).(1) and
    v2 = boites.(1).(2) and
@@ -616,88 +616,9 @@ let ordre = [|
       (8, 9);
       (9, 9)|];;
 
-(*TO BE DELETED, ancienne tentative non fonctionnelle*)
-(* a remplacer
-let test_v t =
-    t.(1)<=1 && t.(2)<=1 && t.(3)<=1 && t.(4)<=1 && t.(5)<=1 && t.(6)<=1 && t.(7)<=1 && t.(8)<=1 && t.(9)<=1;;
-
-let l_plateau plateau = 
-    let res = ref true in
-    for i = 1 to 9 do
-        let test = Array.make 10 0 in
-            for j = 1 to 9 do
-                test.(plateau.(i).(j)) <- 1 + test.(plateau.(i).(j))
-            done;
-        res:= !res && test_v test;
-    done;
-    !res;;
-
-let c_plateau plateau = 
-    let res = ref true in 
-    for j = 1 to 9 do
-        let test = Array.make 10 0 in
-            for i = 1 to 9 do
-                test.(plateau.(i).(j)) <- 1 + test.(plateau.(i).(j))
-            done;
-        res:= !res && test_v test;
-    done;
-    !res;;
-
-let b_plateau plateau =
-    let res = ref true in
-    for i = 1 to 3 do
-        for j = 1 to 3 do 
-            let bigx = (i-1)*3+1 and bigy = (j-1)*3+1 in
-                let test = Array.make 10 0 in
-                for k = bigx to bigx+2 do
-                    for l = bigy to bigy+2  do
-                        test.(plateau.(k).(l)) <- 1 + test.(plateau.(k).(l))
-                    done
-                done;
-            res:= !res && test_v test;
-        done
-    done;
-    !res;;
-                        
 
 
-let valide plateau =
-    (l_plateau plateau) && (c_plateau plateau) && (b_plateau plateau) ;; 
-
-let nombre_possibilites boites = 
-    let plateau = Array.make_matrix 10 10 0 in
-    for i=1 to 3 do
-        for j =1 to 9 do
-            plateau.(i).(j) <- boites.(i).(j)
-        done
-    done;
-    plateau.(4).(1)<-2;
-    plateau.(5).(1)<-3;
-    plateau.(6).(1)<-5;
-    plateau.(7).(1)<-6;
-    plateau.(8).(1)<-8;
-    plateau.(9).(1)<-9;
-    afficher_tableau_tableau plateau;
-    let cpt = ref 0 in
-    let rec aux k = 
-        match k with 
-        | m when(m=Array.length ordre) -> if valide plateau then 
-                    (incr cpt ;print_int !cpt;print_string "\n";)
-        | _ -> if valide plateau then
-                        let (x,y)= ordre.(k) in
-                        begin
-                        for v = 1 to 9 do 
-                            plateau.(x).(y) <- v;
-                            aux (k+1);
-                            plateau.(x).(y) <- 0;
-                        done;
-                        end
-    in aux 0; 
-    !cpt;;
-print_string "nbres";;
-print_int (nombre_possibilites (fst representants.(0)));;
-
-let test =fst representants.(0);;*)
+(*let test =fst representants.(0);;*)
 
 
 (*let u = Array.make_matrix 3 9 0;;
