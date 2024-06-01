@@ -711,13 +711,13 @@ let rec parcours u tableau num =
          while !m <> 0 do
             if num = 0 then
                begin print_string "On est au premier appel, indice"; print_int !m; print_newline (); end;
-               let i = !m land (- !m) in (*le plus petit bit à 1*)
-               m := !m - i;
-               placer u tableau (x - 1) (y - 1) i;
-               res := !res + parcours u tableau (num + 1);
-               retirer u tableau (x - 1) (y - 1) i;
-            done;
-            !res;
+            let i = !m land (- !m) in (*le plus petit bit à 1*)
+            m := !m - i;
+            placer u tableau (x - 1) (y - 1) i;
+            res := !res + parcours u tableau (num + 1);
+            retirer u tableau (x - 1) (y - 1) i;
+         done;
+         !res;
       end;
 ;;
 
